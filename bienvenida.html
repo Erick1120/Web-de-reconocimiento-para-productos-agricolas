@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asistente de Compras para Personas Invidentes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1>Bienvenidos a tu asistente de compras</h1>
+    <div id="mainMessage">
+        Seleccione los productos que deseas comprar.
+    </div>
+    <img id="microphone" src="red_microphone.png" alt="Micrófono Rojo" title="Activar Reconocimiento de Voz" style="cursor: pointer;">
+    <form id="productForm" style="text-align: center;">
+        <input type="hidden" name="selected_products" id="selected_products">
+        <div id="productList">
+            <div class="product-item" data-product="manzana">
+                <img src="fruits_and_vegetables/apple.png" alt="manzana">
+                <label>Manzana</label>
+            </div>
+            <div class="product-item" data-product="ajo">
+                <img src="fruits_and_vegetables/garlic.png" alt="ajo">
+                <label>Ajo</label>
+            </div>
+            <div class="product-item" data-product="mandarina">
+                <img src="fruits_and_vegetables/tangerine.png" alt="mandarina">
+                <label>Mandarina</label>
+            </div>
+            <div class="product-item" data-product="mango">
+                <img src="fruits_and_vegetables/mango.png" alt="mango">
+                <label>Mango</label>
+            </div>
+            <div class="product-item" data-product="banano">
+                <img src="fruits_and_vegetables/banana.png" alt="banano">
+                <label>Banano</label>
+            </div>
+            <div class="product-item" data-product="pera">
+                <img src="fruits_and_vegetables/pear.png" alt="pera">
+                <label>Pera</label>
+            </div>
+            <div class="product-item" data-product="piña">
+                <img src="fruits_and_vegetables/pineapple.png" alt="piña">
+                <label>Piña</label>
+            </div>
+            <div class="product-item" data-product="limón">
+                <img src="fruits_and_vegetables/lemon.png" alt="limón">
+                <label>Limón</label>
+            </div>
+            <div class="product-item" data-product="guayaba">
+                <img src="fruits_and_vegetables/guayaba.png" alt="guayaba">
+                <label>Guayaba</label>
+            </div>
+            <div class="product-item" data-product="pimenton">
+                <img src="fruits_and_vegetables/bell pepper.png" alt="pimentón">
+                <label>Pimentón</label>
+            </div>
+            <div class="product-item" data-product="maracuya">
+                <img src="fruits_and_vegetables/passion fruit.png" alt="maracuyá">
+                <label>Maracuyá</label>
+            </div>
+            <div class="product-item" data-product="Cebolla">
+                <img src="fruits_and_vegetables/cebolla_larga.png" alt="Cebolla">
+                <label>Cebolla larga</label>
+            </div>
+        </div>
+        <button type="button" id="continueButton">Continuar</button>
+    </form>
+    <div id="selectedItems"></div>
+
+    <script src="functions.js"></script>
+
+</body>
+</html>

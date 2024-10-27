@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos Seleccionados</title>
+    <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+    <h1>Identificación de productos</h1>
+    
+    <div id="camera-space">
+        <!-- Aquí se mostrará la cámara web -->
+    </div>
+
+    <div id="checkbox-list">
+        <!-- Aquí se generarán los checkboxes dinámicamente -->
+    </div>
+
+    <button id="finish-button">Finalizar</button>
+
+    <script>
+        // Recuperar los productos seleccionados del localStorage
+        const productosSeleccionados = JSON.parse(localStorage.getItem('selectedProducts')) || [];
+
+        const checkboxList = document.getElementById('checkbox-list');
+
+        productosSeleccionados.forEach(producto => {
+            const container = document.createElement('div');
+            container.className = 'checkbox-container';
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = producto;
+            checkbox.checked = true;
+            checkbox.disabled = true; // Los hace no seleccionables manualmente
+
+            const label = document.createElement('label');
+            label.htmlFor = producto;
+            label.appendChild(document.createTextNode(producto));
+
+            container.appendChild(checkbox);
+            container.appendChild(label);
+
+            checkboxList.appendChild(container);
+        });
+
+        // Función para iniciar la cámara web
+        async function initCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const videoElement = document.createElement('video');
+                videoElement.srcObject = stream;
+                videoElement.autoplay = true;
+                videoElement.width = 120;
+                videoElement.height = 120;
+                document.getElementById('camera-space').appendChild(videoElement);
+            } catch (error) {
+                console.error("Error accessing the camera:", error);
+                document.getElementById('camera-space').textContent = "No se pudo acceder a la cámara";
+            }
+        }
+
+        // Iniciar la cámara cuando se carga la página
+        initCamera();
+
+        // Función para leer en voz alta los productos seleccionados
+        function readProductos() {
+            const message = "Los productos seleccionados son: " + productosSeleccionados.join(", ");
+            const utterance = new SpeechSynthesisUtterance(message);
+            utterance.lang = 'es-ES';
+            speechSynthesis.speak(utterance);
+        }
+
+        // Leer los productos cuando se carga la página
+        window.onload = readProductos;
+
+        // Redirigir a 'bienvenida.html' al hacer clic en el botón 'Finalizar'
+        document.getElementById('finish-button').addEventListener('click', function() {
+            window.location.href = 'bienvenida.html';
+        });
+    </script>
+</body>
+</html>

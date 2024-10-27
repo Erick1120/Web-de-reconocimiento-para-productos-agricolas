@@ -1,0 +1,88 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e8f5e9;
+    color: #000000;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    color: white;
+    background-color: #286a39;
+    text-align: center;
+    padding: 20px;
+    margin: 0;
+    width: 100vw;
+    position: relative;
+    box-sizing: border-box;
+}
+
+#mainMessage {
+    font-size: 1.2em;
+    margin: 20px 0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+
+#microphone {
+    width: 100px;
+    height: 100px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 20px 0;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+#productList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 80%;
+    max-width: 800px;
+    margin: 20px 0;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.product-item {
+    width: 100px;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #000;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.product-item.selected {
+    background-color: #4caf50; /* Color verde al seleccionar */
+    color: white;
+}
+
+.product-item img {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 5px;
+}
+
+#selectedItems {
+    margin-top: 20px;
+    font-weight: bold;
+}
