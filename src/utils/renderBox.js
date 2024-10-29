@@ -1,5 +1,5 @@
 import labels from "./labels.json";
-
+import { obtenerZona } from "./mapeo";
 /**
  * Render prediction boxes
  * @param {HTMLCanvasElement} canvasRef canvas tag reference
@@ -8,7 +8,14 @@ import labels from "./labels.json";
  * @param {Array} classes_data class array
  * @param {Array[Number]} ratios boxes ratio [xRatio, yRatio]
  */
-export const renderBoxes = (canvasRef, boxes_data, scores_data, classes_data, ratios, setDetections) => {
+export const renderBoxes = (
+  canvasRef,
+  boxes_data,
+  scores_data,
+  classes_data,
+  ratios,
+  setDetections
+) => {
   const ctx = canvasRef.getContext("2d");
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // clean canvas
 
@@ -39,7 +46,10 @@ export const renderBoxes = (canvasRef, boxes_data, scores_data, classes_data, ra
     ctx.fillRect(x1, y1, width, height);
 
     ctx.strokeStyle = color;
-    ctx.lineWidth = Math.max(Math.min(ctx.canvas.width, ctx.canvas.height) / 200, 2.5);
+    ctx.lineWidth = Math.max(
+      Math.min(ctx.canvas.width, ctx.canvas.height) / 200,
+      2.5
+    );
     ctx.strokeRect(x1, y1, width, height);
 
     ctx.fillStyle = color;
@@ -56,20 +66,20 @@ export const renderBoxes = (canvasRef, boxes_data, scores_data, classes_data, ra
     ctx.fillStyle = "#ffffff";
     ctx.fillText(klass + " - " + score + "%", x1 - 1, yText < 0 ? 0 : yText);
 
-    // Asegúrate de que x1 y yText son números antes de aplicar toFixed
-    const xValue = parseFloat(x1 - 1).toFixed(2);
-    const yValue = parseFloat(yText < 0 ? 0 : yText).toFixed(2);
-    
-    // Guardar detección en la lista
-    detectionsList.push(`${klass} - ${score}% - X(${xValue}) - Y(${yValue})`);
-    
+    // Calcular el centro del objeto
+    const centerX = ((x1 + x2) / 2).toFixed(2);
+    const centerY = ((y1 + y2) / 2).toFixed(2);
+
+    const zona = obtenerZona(centerX, centerY);
+
+    detectionsList.push(
+      `${klass} - ${score}% - Center X(${centerX}) - Center Y(${centerY}) - Zona: ${zona}`
+    );
   }
 
   // Actualizar el estado con la lista de detecciones
   setDetections(detectionsList);
 };
-
-
 
 class Colors {
   // ultralytics color palette https://ultralytics.com/
@@ -104,9 +114,11 @@ class Colors {
   static hexToRgba = (hex, alpha) => {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result
-      ? `rgba(${[parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)].join(
-          ", "
-        )}, ${alpha})`
+      ? `rgba(${[
+          parseInt(result[1], 16),
+          parseInt(result[2], 16),
+          parseInt(result[3], 16),
+        ].join(", ")}, ${alpha})`
       : null;
   };
 }

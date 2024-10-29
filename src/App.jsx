@@ -51,7 +51,7 @@ const App = () => {
       <div className="header">
         <h1>Detección de frutas</h1>
         <p>
-          Yolo convertido a tfjs <code>by umng</code>
+          Yolo convertido a tfjs <code>Tesis: UMNG</code>
         </p>
         <p>
           Serving : <code className="code">{modelName}</code>
