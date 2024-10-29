@@ -8,13 +8,13 @@ import labels from "./labels.json";
  * @param {Array} classes_data class array
  * @param {Array[Number]} ratios boxes ratio [xRatio, yRatio]
  */
-export const renderBoxes = (canvasRef, boxes_data, scores_data, classes_data, ratios) => {
+export const renderBoxes = (canvasRef, boxes_data, scores_data, classes_data, ratios, setDetections) => {
   const ctx = canvasRef.getContext("2d");
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // clean canvas
 
   const colors = new Colors();
+  const detectionsList = []; // Lista para almacenar detecciones
 
-  // font configs
   const font = `${Math.max(
     Math.round(Math.max(ctx.canvas.width, ctx.canvas.height) / 40),
     14
@@ -23,7 +23,6 @@ export const renderBoxes = (canvasRef, boxes_data, scores_data, classes_data, ra
   ctx.textBaseline = "top";
 
   for (let i = 0; i < scores_data.length; ++i) {
-    // filter based on class threshold
     const klass = labels[classes_data[i]];
     const color = colors.get(classes_data[i]);
     const score = (scores_data[i] * 100).toFixed(1);
@@ -36,32 +35,41 @@ export const renderBoxes = (canvasRef, boxes_data, scores_data, classes_data, ra
     const width = x2 - x1;
     const height = y2 - y1;
 
-    // draw box.
     ctx.fillStyle = Colors.hexToRgba(color, 0.2);
     ctx.fillRect(x1, y1, width, height);
 
-    // draw border box.
     ctx.strokeStyle = color;
     ctx.lineWidth = Math.max(Math.min(ctx.canvas.width, ctx.canvas.height) / 200, 2.5);
     ctx.strokeRect(x1, y1, width, height);
 
-    // Draw the label background.
     ctx.fillStyle = color;
     const textWidth = ctx.measureText(klass + " - " + score + "%").width;
-    const textHeight = parseInt(font, 10); // base 10
+    const textHeight = parseInt(font, 10);
     const yText = y1 - (textHeight + ctx.lineWidth);
     ctx.fillRect(
       x1 - 1,
-      yText < 0 ? 0 : yText, // handle overflow label box
+      yText < 0 ? 0 : yText,
       textWidth + ctx.lineWidth,
       textHeight + ctx.lineWidth
     );
 
-    // Draw labels
     ctx.fillStyle = "#ffffff";
     ctx.fillText(klass + " - " + score + "%", x1 - 1, yText < 0 ? 0 : yText);
+
+    // Asegúrate de que x1 y yText son números antes de aplicar toFixed
+    const xValue = parseFloat(x1 - 1).toFixed(2);
+    const yValue = parseFloat(yText < 0 ? 0 : yText).toFixed(2);
+    
+    // Guardar detección en la lista
+    detectionsList.push(`${klass} - ${score}% - X(${xValue}) - Y(${yValue})`);
+    
   }
+
+  // Actualizar el estado con la lista de detecciones
+  setDetections(detectionsList);
 };
+
+
 
 class Colors {
   // ultralytics color palette https://ultralytics.com/

@@ -43,9 +43,10 @@ const preprocess = (source, modelWidth, modelHeight) => {
  * @param {HTMLImageElement|HTMLVideoElement} source
  * @param {tf.GraphModel} model loaded YOLOv8 tensorflow.js model
  * @param {HTMLCanvasElement} canvasRef canvas reference
+ * @param {Function} updateDetections callback to update detection text
  * @param {VoidFunction} callback function to run after detection process
  */
-export const detect = async (source, model, canvasRef, callback = () => {}) => {
+export const detect = async (source, model, canvasRef, updateDetections, callback = () => {}) => {
   const [modelWidth, modelHeight] = model.inputShape.slice(1, 3); // get model width and height
 
   tf.engine().startScope(); // start scoping tf engine
@@ -58,32 +59,32 @@ export const detect = async (source, model, canvasRef, callback = () => {}) => {
     const h = transRes.slice([0, 0, 3], [-1, -1, 1]); // get height
     const x1 = tf.sub(transRes.slice([0, 0, 0], [-1, -1, 1]), tf.div(w, 2)); // x1
     const y1 = tf.sub(transRes.slice([0, 0, 1], [-1, -1, 1]), tf.div(h, 2)); // y1
-    return tf
-      .concat(
-        [
-          y1,
-          x1,
-          tf.add(y1, h), //y2
-          tf.add(x1, w), //x2
-        ],
-        2
-      )
-      .squeeze();
+    return tf.concat(
+      [
+        y1,
+        x1,
+        tf.add(y1, h), // y2
+        tf.add(x1, w), // x2
+      ],
+      2
+    ).squeeze();
   }); // process boxes [y1, x1, y2, x2]
 
   const [scores, classes] = tf.tidy(() => {
     // class scores
-    const rawScores = transRes.slice([0, 0, 4], [-1, -1, numClass]).squeeze(0); // #6 only squeeze axis 0 to handle only 1 class models
+    const rawScores = transRes.slice([0, 0, 4], [-1, -1, numClass]).squeeze(0);
     return [rawScores.max(1), rawScores.argMax(1)];
   }); // get max scores and classes index
 
-  const nms = await tf.image.nonMaxSuppressionAsync(boxes, scores, 500, 0.45, 0.2); // NMS to filter boxes
+  const nms = await tf.image.nonMaxSuppressionAsync(boxes, scores, 500, 0.45, 0.8); // NMS to filter boxes
 
   const boxes_data = boxes.gather(nms, 0).dataSync(); // indexing boxes by nms index
   const scores_data = scores.gather(nms, 0).dataSync(); // indexing scores by nms index
   const classes_data = classes.gather(nms, 0).dataSync(); // indexing classes by nms index
 
-  renderBoxes(canvasRef, boxes_data, scores_data, classes_data, [xRatio, yRatio]); // render boxes
+  // Pasar el callback `updateDetections` a renderBoxes
+  renderBoxes(canvasRef, boxes_data, scores_data, classes_data, [xRatio, yRatio], updateDetections);
+
   tf.dispose([res, transRes, boxes, scores, classes, nms]); // clear memory
 
   callback();
@@ -96,8 +97,9 @@ export const detect = async (source, model, canvasRef, callback = () => {}) => {
  * @param {HTMLVideoElement} vidSource video source
  * @param {tf.GraphModel} model loaded YOLOv8 tensorflow.js model
  * @param {HTMLCanvasElement} canvasRef canvas reference
+ * @param {Function} updateDetections callback to update detection text
  */
-export const detectVideo = (vidSource, model, canvasRef) => {
+export const detectVideo = (vidSource, model, canvasRef, updateDetections) => {
   /**
    * Function to detect every frame from video
    */
@@ -108,7 +110,8 @@ export const detectVideo = (vidSource, model, canvasRef) => {
       return; // handle if source is closed
     }
 
-    detect(vidSource, model, canvasRef, () => {
+    // Llamar a `detect` y pasar `updateDetections`
+    detect(vidSource, model, canvasRef, updateDetections, () => {
       requestAnimationFrame(detectFrame); // get another frame
     });
   };

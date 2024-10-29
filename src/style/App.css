@@ -22,7 +22,7 @@
 
 .code {
   padding: 5px;
-  color: greenyellow;
+  color: rgb(255, 47, 217);
   background-color: black;
   border-radius: 5px;
 }
@@ -37,9 +37,9 @@
 
 .content > video {
   display: none;
-  width: 100%;
-  max-width: 720px;
-  max-height: 500px;
+  width: 80%;
+  max-width: 640px;
+  max-height: 640px;
   border-radius: 10px;
 }
 
@@ -51,7 +51,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 80%;
   height: 100%;
 }
 
@@ -67,17 +67,18 @@ button {
 }
 
 button:hover {
-  color: black;
+  color: rgb(0, 0, 0);
   background-color: white;
   border: 2px solid black;
 }
-
-.voice-text-container {
-  background-color: white; /* Change background color as needed */
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  margin-bottom: 10px; /* Space between the text and the video */
-  text-align: center; /* Center the text */
+.text-box {
+  border: 2px solid #006400; /* Cambiado a verde oscuro */
+  padding: 10px; /* Espacio interno */
+  margin: 10px 0; /* Margen */
+  width: 700px; /* Ancho del recuadro */
+  height: 400px;
+  text-align: center; /* Centrar texto */
+  max-height: 300px; /* Altura máxima para el contenedor */
+  overflow-y: auto; /* Habilitar scroll vertical */
+  box-sizing: border-box; /* Asegurarse de que el padding y border no afecten el ancho total */
 }

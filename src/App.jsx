@@ -1,27 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as tf from "@tensorflow/tfjs";
-import "@tensorflow/tfjs-backend-webgl"; // set backend to webgl
+import "@tensorflow/tfjs-backend-webgl";
 import Loader from "./components/loader";
 import ButtonHandler from "./components/btn-handler";
-import { detectVideo } from "./utils/detect"; // Only keep video detection
+import { detectVideo } from "./utils/detect";
 import "./style/App.css";
 
 const App = () => {
-  const [loading, setLoading] = useState({ loading: true, progress: 0 }); // loading state
+  const [loading, setLoading] = useState({ loading: true, progress: 0 });
   const [model, setModel] = useState({
     net: null,
     inputShape: [1, 0, 0, 3],
-  }); // init model & input shape
+  });
+  const [detections, setDetections] = useState([]); // State for detections
 
-  // New state for voice text
-  const [voiceText, setVoiceText] = useState("Texto de voz");
-
-  // references
   const cameraRef = useRef(null);
   const canvasRef = useRef(null);
 
-  // model configs
-  const modelName = "yolo11n";
+  const modelName = "yolodev";
 
   useEffect(() => {
     tf.ready().then(async () => {
@@ -29,12 +25,11 @@ const App = () => {
         `${window.location.href}/${modelName}/model.json`,
         {
           onProgress: (fractions) => {
-            setLoading({ loading: true, progress: fractions }); // set loading fractions
+            setLoading({ loading: true, progress: fractions });
           },
         }
-      ); // load model
+      );
 
-      // warming up model
       const dummyInput = tf.ones(yolov8.inputs[0].shape);
       const warmupResults = yolov8.execute(dummyInput);
 
@@ -42,19 +37,21 @@ const App = () => {
       setModel({
         net: yolov8,
         inputShape: yolov8.inputs[0].shape,
-      }); // set model & input shape
+      });
 
-      tf.dispose([warmupResults, dummyInput]); // cleanup memory
+      tf.dispose([warmupResults, dummyInput]);
     });
   }, []);
 
   return (
     <div className="App">
-      {loading.loading && <Loader>Loading model... {(loading.progress * 100).toFixed(2)}%</Loader>}
+      {loading.loading && (
+        <Loader>Cargando... {(loading.progress * 100).toFixed(2)}%</Loader>
+      )}
       <div className="header">
-        <h1>📷 YOLOv8 Live Detection App</h1>
+        <h1>Detección de frutas</h1>
         <p>
-          YOLOv8 live detection application on browser powered by <code>tensorflow.js</code>
+          Yolo convertido a tfjs <code>by umng</code>
         </p>
         <p>
           Serving : <code className="code">{modelName}</code>
@@ -62,19 +59,35 @@ const App = () => {
       </div>
 
       <div className="content">
-        <div className="voice-text-container">
-          <p>{voiceText}</p>
-        </div>
         <video
           autoPlay
           muted
           ref={cameraRef}
-          onPlay={() => detectVideo(cameraRef.current, model, canvasRef.current)}
+          onPlay={
+            () =>
+              detectVideo(
+                cameraRef.current,
+                model,
+                canvasRef.current,
+                setDetections
+              ) // Pass setDetections here
+          }
         />
-        <canvas width={model.inputShape[1]} height={model.inputShape[2]} ref={canvasRef} />
+        <canvas
+          width={model.inputShape[1]}
+          height={model.inputShape[2]}
+          ref={canvasRef}
+        />
       </div>
-
       <ButtonHandler cameraRef={cameraRef} />
+      <div className="text-box">
+        <h2>Detecciones:</h2>
+        <ul>
+          {detections.map((det, index) => (
+            <li key={index}>{det}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
