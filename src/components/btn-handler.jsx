@@ -20,7 +20,7 @@ const ButtonHandler = ({ cameraRef }) => {
           // if not streaming
           if (streaming === null) {
             webcam.open(cameraRef.current); // open webcam
-            cameraRef.current.style.display = "none"; // show camera
+            cameraRef.current.style.display = "block"; // show camera
             setStreaming("camera"); // set streaming to camera
           }
           // closing video streaming
