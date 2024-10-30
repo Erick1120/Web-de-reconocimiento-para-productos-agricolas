@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductList from "./components/ProductList";
-import { startVoiceRecognition, speakMessage, requestMediaAccess } from "./utils/functions"; // Import functions
+import {startVoiceRecognition, speakMessage, requestMediaAccess } from "./utils/functions"; // Import functions
 import "./style/bienvenida.css";
 
 function App() {

@@ -14,7 +14,7 @@ import pimentonImg from "./fruits_and_vegetables/bell pepper.png";
 import maracuyaImg from "./fruits_and_vegetables/passion fruit.png";
 import cebollaImg from "./fruits_and_vegetables/cebolla_larga.png";
 
-const products = [
+export const products = [
   { name: "Manzana", imgSrc: appleImg },
   { name: "Ajo", imgSrc: garlicImg },
   { name: "Mandarina", imgSrc: tangerineImg },
@@ -34,7 +34,7 @@ const ProductList = ({ onProductSelect, selectedProducts }) => {
     <div id="productList">
       {products.map((product) => (
         <div
-          className={`product-item ${selectedProducts.includes(product.name) ? "selected" : ""}`} // Añade la clase 'selected' si el producto está seleccionado
+          className={`product-item ${selectedProducts.includes(product.name) ? "selected" : ""}`}
           key={product.name}
           onClick={() => onProductSelect(product.name)}
           style={{ cursor: "pointer" }}

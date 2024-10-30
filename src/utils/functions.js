@@ -4,7 +4,7 @@ let recognition; // Variable de reconocimiento global
 let isRecognitionActive = false; // Controla si el reconocimiento está activo
 
 // Importa la lista de productos para poder acceder a ella
-import { products } from "../components/ProductList"; // Asegúrate de que la ruta sea correcta
+import { products } from "../components/ProductList";
 
 export const handleProductSelect = (
   product,
@@ -42,7 +42,8 @@ export const toggleVoiceRecognition = (setVoiceText, setSelectedProducts) => {
   }
 };
 
-const startVoiceRecognition = (setVoiceText, setSelectedProducts) => {
+// Exporta la función para que se pueda usar en otros módulos
+export const startVoiceRecognition = (setVoiceText, setSelectedProducts) => {
   recognition = new (window.SpeechRecognition ||
     window.webkitSpeechRecognition)();
   recognition.lang = "es-ES";
