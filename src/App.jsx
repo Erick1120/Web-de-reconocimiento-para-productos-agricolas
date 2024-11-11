@@ -17,7 +17,7 @@ const App = () => {
   const cameraRef = useRef(null);
   const canvasRef = useRef(null);
 
-  const modelName = "yolodev";
+  const modelName = "yolo11n_trainfull";
 
   useEffect(() => {
     tf.ready().then(async () => {

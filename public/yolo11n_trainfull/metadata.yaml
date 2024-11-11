@@ -1,0 +1,49 @@
+description: Ultralytics YOLO11n model trained on /content/data/data.yaml
+author: Ultralytics
+date: '2024-11-11T13:48:28.677555'
+version: 8.3.29
+license: AGPL-3.0 License (https://ultralytics.com/license)
+docs: https://docs.ultralytics.com
+stride: 32
+task: detect
+batch: 1
+imgsz:
+- 640
+- 640
+names:
+  0: apple
+  1: banana
+  2: grape
+  3: mango
+  4: strawberry
+  5: pineapple
+  6: papaya
+  7: guayaba
+  8: lulo
+  9: limon
+  10: orange
+  11: blackberry
+  12: avocado green
+  13: avocado black
+  14: kiwi
+  15: watermelon
+  16: pear
+  17: granadilla
+  18: bean
+  19: broccoli
+  20: cabbage
+  21: capsicum
+  22: carrot
+  23: cauliflower
+  24: cucumber
+  25: potato
+  26: tomato
+  27: onion
+  28: spinach
+  29: green onion
+  30: corn
+  31: garlic
+  32: pumpkin
+  33: parsley
+  34: cilantro
+  35: red onion
