@@ -1,111 +1,107 @@
-// utils/functions.js
+let recognition; // Mantener la variable global de reconocimiento
+let isRecognitionActive = false;
 
-let recognition; // Variable de reconocimiento global
-let isRecognitionActive = false; // Controla si el reconocimiento está activo
-
-// Importa la lista de productos para poder acceder a ella
-import { products } from "../components/ProductList";
-
-export const handleProductSelect = (
-  product,
-  selectedProducts,
-  setSelectedProducts,
-  setVoiceText
-) => {
-  const newSelectedProducts = selectedProducts.includes(product)
-    ? selectedProducts.filter((p) => p !== product)
-    : [...selectedProducts, product];
-
-  setSelectedProducts(newSelectedProducts);
-  updateSelectedItemsText(newSelectedProducts, setVoiceText);
+const capitalizeEachWord = (str) => {
+  return str
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 };
 
-export const updateSelectedItemsText = (products, setVoiceText) => {
-  if (products.length > 0) {
-    speakMessage(`Has seleccionado ${products[products.length - 1]}`);
-  } else {
-    speakMessage("No se han seleccionado productos.");
+export const startVoiceRecognition = (setSelectedProducts) => {
+  if (!("webkitSpeechRecognition" in window)) {
+    console.warn("El navegador no soporta Speech Recognition API");
+    return;
   }
-};
 
-export const toggleVoiceRecognition = (setVoiceText, setSelectedProducts) => {
-  if (isRecognitionActive) {
-    // Detiene el reconocimiento de voz
-    isRecognitionActive = false;
-    recognition.stop();
-    document.getElementById("microphone").src = "red_microphone.png"; // Cambia el icono de vuelta a rojo
-    speakMessage("El reconocimiento de voz ha terminado.");
-  } else {
-    // Inicia el reconocimiento de voz
-    isRecognitionActive = true;
-    startVoiceRecognition(setVoiceText, setSelectedProducts);
-  }
-};
-
-// Exporta la función para que se pueda usar en otros módulos
-export const startVoiceRecognition = (setVoiceText, setSelectedProducts) => {
-  recognition = new (window.SpeechRecognition ||
-    window.webkitSpeechRecognition)();
-  recognition.lang = "es-ES";
-  recognition.interimResults = false;
-
-  recognition.onstart = () => {
-    document.getElementById("microphone").src = "orange_microphone.png"; // Cambia el icono a naranja
-    speakMessage(
-      "Comienza a hablar, menciona los productos que deseas agregar."
-    );
-  };
+  const SpeechRecognition = window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+  recognition.lang = "es-CO";
+  recognition.continuous = true;
+  speakMessage("Empieza a hablar ahora.");
 
   recognition.onresult = (event) => {
-    const transcript = event.results[0][0].transcript.toLowerCase();
-    const words = transcript.split(" ");
+    const transcript = event.results[event.results.length - 1][0].transcript
+      .trim()
+      .toLowerCase();
+    console.log("Reconociendo:", transcript);
 
-    // Lista de nombres de productos para comparar (en minúsculas)
-    const productNames = products.map((product) => product.name.toLowerCase());
+    const localProducts = [
+      { singular: "manzana", plural: "manzanas" },
+      { singular: "ajo", plural: "ajos" },
+      { singular: "mandarina", plural: "mandarinas" },
+      { singular: "mango", plural: "mangos" },
+      { singular: "banano", plural: "bananos" },
+      { singular: "pera", plural: "peras" },
+      { singular: "cebolla cabezona", plural: "cebollas cabezonas" },
+      { singular: "piña", plural: "piñas" },
+      { singular: "limón", plural: "limones" },
+      { singular: "guayaba", plural: "guayabas" },
+      { singular: "pimentón", plural: "pimentones" },
+      { singular: "maracuyá", plural: "maracuyás" },
+      { singular: "cebolla larga", plural: "cebollas largas" },
+      { singular: "plátano", plural: "plátanos" },
+      { singular: "mora", plural: "moras" },
+      { singular: "cilantro", plural: "cilantros" },
+      { singular: "papa", plural: "papas" },
+      { singular: "tomate", plural: "tomates" },
+      { singular: "uva", plural: "uvas" },
+      { singular: "papaya", plural: "papayas" },
+      { singular: "lulo", plural: "lulos" },
+      { singular: "naranja", plural: "naranjas" },
+      { singular: "aguacate verde", plural: "aguacates verdes" },
+      { singular: "aguacate negro", plural: "aguacates negros" },
+      { singular: "kiwi", plural: "kiwis" },
+      { singular: "sandía", plural: "sandías" },
+      { singular: "granadilla", plural: "granadillas" },
+      { singular: "fríjol", plural: "fríjoles" },
+      { singular: "repollo", plural: "repollos" },
+      { singular: "zanahoria", plural: "zanahorias" },
+      { singular: "coliflor", plural: "coliflores" },
+      { singular: "pepino", plural: "pepinos" },
+      { singular: "espinaca", plural: "espinacas" },
+      { singular: "maíz", plural: "mazorcas" },
+      { singular: "calabaza", plural: "calabazas" },
+      { singular: "perejil", plural: "perejiles" },
+      { singular: "cebolla roja", plural: "cebollas rojas" },
+    ];
 
-    setSelectedProducts((prev) => {
-      let newSelectedProducts = [...prev];
-
-      words.forEach((word) => {
-        // Solo selecciona o deselecciona si el producto está en la lista
-        if (productNames.includes(word)) {
-          if (newSelectedProducts.includes(word)) {
-            newSelectedProducts = newSelectedProducts.filter((p) => p !== word); // Deseleccionar
-            speakMessage(`${word} ha sido deseleccionado.`);
-          } else {
-            newSelectedProducts.push(word); // Seleccionar
-            speakMessage(`Has seleccionado ${word}.`);
-          }
-        }
-      });
-
-      return newSelectedProducts;
+    localProducts.forEach((product) => {
+      if (
+        transcript.includes(product.singular) ||
+        transcript.includes(product.plural)
+      ) {
+        // Capitaliza cada palabra en el nombre en singular y lo envía a handleProductSelect
+        const capitalizedProduct = capitalizeEachWord(product.singular);
+        handleProductSelect(capitalizedProduct, setSelectedProducts);
+      }
     });
   };
 
   recognition.onerror = (event) => {
-    console.error("Error de reconocimiento:", event.error);
-    speakMessage("Error de reconocimiento: " + event.error);
+    console.error("Error en el reconocimiento de voz:", event.error);
   };
+};
 
-  recognition.onend = () => {
-    if (isRecognitionActive) {
-      // Si la escucha aún está activa, reinicia el reconocimiento
-      recognition.start();
-    } else {
-      // Cambia el icono de vuelta a rojo si la escucha ha terminado
-      document.getElementById("microphone").src = "red_microphone.png";
-      speakMessage("El reconocimiento de voz ha terminado.");
-    }
-  };
-
-  recognition.start();
+export const toggleVoiceRecognition = (setSelectedProducts) => {
+  if (isRecognitionActive) {
+    // Detiene el reconocimiento
+    isRecognitionActive = false;
+    recognition.stop();
+    speakMessage("La selección por voz a terminado.");
+    document.getElementById("microphone").src = "red_microphone.png";
+  } else {
+    // Activa el reconocimiento de voz
+    isRecognitionActive = true;
+    startVoiceRecognition(setSelectedProducts);
+    recognition.start();
+    document.getElementById("microphone").src = "orange_microphone.png";
+  }
 };
 
 export const requestMediaAccess = async () => {
   try {
     await navigator.mediaDevices.getUserMedia({ audio: true });
-    speakMessage("Acceso al micrófono concedido.");
   } catch (error) {
     console.error("Error al acceder al micrófono:", error);
     speakMessage(
@@ -114,13 +110,45 @@ export const requestMediaAccess = async () => {
   }
 };
 
+export const handleProductSelect = (product, setSelectedProducts) => {
+  setSelectedProducts((prevSelected) => {
+    const isSelected = prevSelected.includes(product);
+    const newSelectedProducts = isSelected
+      ? prevSelected.filter((p) => p !== product) // Deselect if already selected
+      : [...prevSelected, product]; // Select if not already selected
+
+    updateSelectedItemsText(product, isSelected);
+    return newSelectedProducts;
+  });
+};
+
+// Función que genera el mensaje basado en si el producto fue seleccionado o deseleccionado
+export const updateSelectedItemsText = (product, isSelected) => {
+  if (isSelected) {
+    speakMessage(`${product} ha sido quitado`);
+  } else {
+    speakMessage(`Has seleccionado ${product}`);
+  }
+};
+
 export const speakMessage = (message) => {
   if (!("speechSynthesis" in window)) {
     console.error("Speech synthesis no es compatible en este navegador.");
     return;
   }
+
+  const voices = window.speechSynthesis.getVoices();
+  let selectedVoice = voices.find((voice) => voice.lang === "es-CO");
+
+  if (!selectedVoice) {
+    selectedVoice = voices.find(
+      (voice) => voice.lang.startsWith("es") && !voice.lang.includes("en")
+    );
+  }
+
   const utterance = new SpeechSynthesisUtterance(message);
-  utterance.lang = "es-ES";
+  utterance.voice = selectedVoice;
+  utterance.lang = selectedVoice ? selectedVoice.lang : "es-MX";
   utterance.onerror = (error) =>
     console.error("Error al sintetizar voz:", error);
   speechSynthesis.speak(utterance);

@@ -18,7 +18,6 @@ export const renderBoxes = (
 ) => {
   const ctx = canvasRef.getContext("2d");
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // clean canvas
-
   const colors = new Colors();
   const detectionsList = []; // Lista para almacenar detecciones
 
@@ -71,7 +70,9 @@ export const renderBoxes = (
     const centerY = ((y1 + y2) / 2).toFixed(2);
 
     const zona = obtenerZona(centerX, centerY);
-
+    console.log("clase:", klass);
+    console.log("PosX", centerX);
+    console.log("Posy", centerY);
     detectionsList.push(
       `${klass} - ${score}% - Center X(${centerX}) - Center Y(${centerY}) - Zona: ${zona}`
     );

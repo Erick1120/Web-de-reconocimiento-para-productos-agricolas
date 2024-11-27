@@ -1,6 +1,6 @@
 description: Ultralytics YOLO11n model trained on /content/FruitDetection-4/data.yaml
 author: Ultralytics
-date: '2024-10-26T17:59:51.411672'
+date: "2024-10-26T17:59:51.411672"
 version: 8.3.23
 license: AGPL-3.0 License (https://ultralytics.com/license)
 docs: https://docs.ultralytics.com
@@ -8,11 +8,11 @@ stride: 32
 task: detect
 batch: 1
 imgsz:
-- 640
-- 640
+  - 640
+  - 640
 names:
-  0: Apple
-  1: Banana
+  0: Manzana
+  1: Banano
   2: Kiwi
-  3: Orange
-  4: Pear
+  3: Naranja
+  4: Pera

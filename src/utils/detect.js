@@ -46,12 +46,18 @@ const preprocess = (source, modelWidth, modelHeight) => {
  * @param {Function} updateDetections callback to update detection text
  * @param {VoidFunction} callback function to run after detection process
  */
-export const detect = async (source, model, canvasRef, updateDetections, callback = () => {}) => {
+export const detect = async (
+  source,
+  model,
+  canvasRef,
+  updateDetections,
+  selectedProducts,
+  callback = () => {}
+) => {
   const [modelWidth, modelHeight] = model.inputShape.slice(1, 3); // get model width and height
-
   tf.engine().startScope(); // start scoping tf engine
   const [input, xRatio, yRatio] = preprocess(source, modelWidth, modelHeight); // preprocess image
-
+  console.log("selectedProducts", selectedProducts);
   const res = model.net.execute(input); // inference model
   const transRes = res.transpose([0, 2, 1]); // transpose result [b, det, n] => [b, n, det]
   const boxes = tf.tidy(() => {
@@ -59,15 +65,17 @@ export const detect = async (source, model, canvasRef, updateDetections, callbac
     const h = transRes.slice([0, 0, 3], [-1, -1, 1]); // get height
     const x1 = tf.sub(transRes.slice([0, 0, 0], [-1, -1, 1]), tf.div(w, 2)); // x1
     const y1 = tf.sub(transRes.slice([0, 0, 1], [-1, -1, 1]), tf.div(h, 2)); // y1
-    return tf.concat(
-      [
-        y1,
-        x1,
-        tf.add(y1, h), // y2
-        tf.add(x1, w), // x2
-      ],
-      2
-    ).squeeze();
+    return tf
+      .concat(
+        [
+          y1,
+          x1,
+          tf.add(y1, h), // y2
+          tf.add(x1, w), // x2
+        ],
+        2
+      )
+      .squeeze();
   }); // process boxes [y1, x1, y2, x2]
 
   const [scores, classes] = tf.tidy(() => {
@@ -76,14 +84,47 @@ export const detect = async (source, model, canvasRef, updateDetections, callbac
     return [rawScores.max(1), rawScores.argMax(1)];
   }); // get max scores and classes index
 
-  const nms = await tf.image.nonMaxSuppressionAsync(boxes, scores, 500, 0.45, 0.8); // NMS to filter boxes
+  const nms = await tf.image.nonMaxSuppressionAsync(
+    boxes,
+    scores,
+    500,
+    0.45,
+    0.8
+  ); // NMS to filter boxes
 
   const boxes_data = boxes.gather(nms, 0).dataSync(); // indexing boxes by nms index
   const scores_data = scores.gather(nms, 0).dataSync(); // indexing scores by nms index
   const classes_data = classes.gather(nms, 0).dataSync(); // indexing classes by nms index
 
+  const filteredBoxes = [];
+  const filteredScores = [];
+  const filteredClasses = [];
+
+  for (let i = 0; i < classes_data.length; i++) {
+    const detectedClass = classes_data[i];
+    const productClass = labels[detectedClass]; // Obtener el nombre de la clase
+
+    // Comprobar si la clase detectada está en los productos seleccionados
+    if (selectedProducts.includes(productClass)) {
+      filteredBoxes.push(boxes_data[i * 4]);
+      filteredBoxes.push(boxes_data[i * 4 + 1]);
+      filteredBoxes.push(boxes_data[i * 4 + 2]);
+      filteredBoxes.push(boxes_data[i * 4 + 3]);
+      filteredScores.push(scores_data[i]);
+      filteredClasses.push(classes_data[i]);
+      console.log("Encontrando:", productClass);
+    }
+  }
+
   // Pasar el callback `updateDetections` a renderBoxes
-  renderBoxes(canvasRef, boxes_data, scores_data, classes_data, [xRatio, yRatio], updateDetections);
+  renderBoxes(
+    canvasRef,
+    filteredBoxes,
+    filteredScores,
+    filteredClasses,
+    [xRatio, yRatio],
+    updateDetections
+  );
 
   tf.dispose([res, transRes, boxes, scores, classes, nms]); // clear memory
 
@@ -99,7 +140,13 @@ export const detect = async (source, model, canvasRef, updateDetections, callbac
  * @param {HTMLCanvasElement} canvasRef canvas reference
  * @param {Function} updateDetections callback to update detection text
  */
-export const detectVideo = (vidSource, model, canvasRef, updateDetections) => {
+export const detectVideo = (
+  vidSource,
+  model,
+  canvasRef,
+  updateDetections,
+  selectedProducts
+) => {
   /**
    * Function to detect every frame from video
    */
@@ -111,9 +158,16 @@ export const detectVideo = (vidSource, model, canvasRef, updateDetections) => {
     }
 
     // Llamar a `detect` y pasar `updateDetections`
-    detect(vidSource, model, canvasRef, updateDetections, () => {
-      requestAnimationFrame(detectFrame); // get another frame
-    });
+    detect(
+      vidSource,
+      model,
+      canvasRef,
+      updateDetections,
+      selectedProducts,
+      () => {
+        requestAnimationFrame(detectFrame); // get another frame
+      }
+    );
   };
 
   detectFrame(); // initialize to detect every frame

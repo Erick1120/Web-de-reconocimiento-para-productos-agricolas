@@ -13,7 +13,7 @@ h1 {
     background-color: #286a39;
     text-align: center;
     padding: 30px;
-    margin: 70px 0 10px 0 !important;   /* Margen inferior para separar del siguiente elemento */
+    margin: 0 0 10px 0;   /* Margen inferior para separar del siguiente elemento */
     width: 100vw;
     box-sizing: border-box;
     font-size: 2em;
@@ -31,14 +31,21 @@ h1 {
     cursor: pointer;
 }
 
-#continueButton {
+button{
     background-color: #4caf50; /* Verde */
-    color: white;
     border: none;
-    padding: 10px 20px;
-    font-size: 1em;
+    border-radius: 5px;
+    color: white;
     cursor: pointer;
+    font-size: 1em;
+    margin: 6px 5px;
+    padding: 10px 10px;
 }
+button:hover {
+    background-color: white;
+    border: 2px solid #4caf50;
+    color: rgb(12, 179, 26);
+  }
 
 #productForm {
     display: flex;
