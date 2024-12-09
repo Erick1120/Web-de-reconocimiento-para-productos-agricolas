@@ -49,36 +49,46 @@ function App() {
   return (
     <div className="App">
       <h1>Bienvenido a tu asistente de compras</h1>
-      <div id="mainMessage" style={{ textAlign: "center" }} key={voiceText}>
-        {voiceText}
-      </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <img
-          id="microphone"
-          src="red_microphone.png"
-          alt="Micrófono Rojo"
-          title="Activar Reconocimiento de Voz"
-          style={{ cursor: "pointer" }}
-          onClick={handleMicClick}
-        />
-      </div>
-      <form id="productForm">
-        <input type="hidden" name="selected_products" id="selected_products" />
-        <ProductList
-          onProductSelect={handleProductClick}
-          selectedProducts={selectedProducts}
-        />
-        <button type="button" onClick={handleContinue} id="continueButton">
-          Continuar
-        </button>
-      </form>
-      <div id="selectedItems"></div>
+      <section className="Contenido">
+        <div id="mainMessage" style={{ textAlign: "center" }} key={voiceText}>
+          {voiceText}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <img
+            id="microphone"
+            src="red_microphone.png"
+            alt="Micrófono Rojo"
+            title="Activar Reconocimiento de Voz"
+            style={{ cursor: "pointer" }}
+            onClick={handleMicClick}
+          />
+        </div>
+
+        <form id="productForm">
+          <input
+            type="hidden"
+            name="selected_products"
+            id="selected_products"
+          />
+          <ProductList
+            onProductSelect={handleProductClick}
+            selectedProducts={selectedProducts}
+          />
+          <button type="button" onClick={handleContinue} id="continueButton">
+            Continuar
+          </button>
+        </form>
+        <div id="selectedItems"></div>
+      </section>
+      <footer>
+        <p>Todos los derechos reservados.</p>
+      </footer>
     </div>
   );
 }

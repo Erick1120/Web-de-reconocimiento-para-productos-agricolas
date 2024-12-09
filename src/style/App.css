@@ -1,11 +1,10 @@
 .App {
   display: flex;
   flex-direction: column;
-    align-items: center;
+  align-items: center;
 }
 
 .content > img {
-  display: none;
   width: 100%;
   max-width: 720px;
   max-height: 500px;
@@ -13,7 +12,6 @@
 }
 
 .content > video {
-  display: none;
   width: 80%;
   max-width: 640px;
   max-height: 640px;
@@ -49,9 +47,9 @@
   align-items: center;
   margin-bottom: 10px;
   padding: 10px;
-  border: 2px solid #4caf50; 
+  border: 2px solid #4caf50;
   border-radius: 5px;
-  background-color: #ffffff; 
+  background-color: #ffffff;
 }
 
 .checkbox-container input[type="checkbox"] {
@@ -63,5 +61,5 @@
 
 .checkbox-container label {
   font-size: 18px;
-  color:black; 
+  color: black;
 }

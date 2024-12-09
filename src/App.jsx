@@ -94,56 +94,61 @@ const App = () => {
         <Loader>Cargando... {(loading.progress * 100).toFixed(2)}%</Loader>
       )}
       <h1>Detección de frutas</h1>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <img
-          id="microphone"
-          src="red_microphone.png"
-          alt="Micrófono Rojo"
-          title="Activar Reconocimiento de Voz"
-          style={{ cursor: "pointer" }}
-          onClick={handleMicClick}
-        />
-      </div>
-      <div className="content">
-        <video
-          autoPlay
-          muted
-          ref={cameraRef}
-          style={{ display: videoVisible ? "block" : "none" }}
-        />
-        <canvas width="640" height="640" ref={canvasRef} />
-      </div>
-      <div className="btn-container">
-        <button onClick={toggleVideoVisibility}>
-          {videoVisible ? "Ocultar" : "Mostrar"} Video
-        </button>
-      </div>
-      <div className="text-box">
-        <h2>Detecciones:</h2>
-        <ul>
-          {detections.map((det, index) => (
-            <li key={index}>{det}</li>
-          ))}
-        </ul>
-      </div>
-      <div className="selected-products">
-        <h2>Productos seleccionados:</h2>
-        <ul>
-          {selectedProducts.map((product, index) => (
-            <li key={index} className="checkbox-container">
-              <input type="checkbox" disabled checked />
-              <label>{product}</label>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <button onClick={handleBack}>Volver</button>
+      <section className="Contenido">
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <img
+            id="microphone"
+            src="red_microphone.png"
+            alt="Micrófono Rojo"
+            title="Activar Reconocimiento de Voz"
+            style={{ cursor: "pointer" }}
+            onClick={handleMicClick}
+          />
+        </div>
+        <div className="content">
+          <video
+            autoPlay
+            muted
+            ref={cameraRef}
+            style={{ display: videoVisible ? "block" : "none" }}
+          />
+          <canvas width="640" height="640" ref={canvasRef} />
+        </div>
+        <div className="btn-container">
+          <button onClick={toggleVideoVisibility}>
+            {videoVisible ? "Ocultar" : "Mostrar"} Video
+          </button>
+        </div>
+        <div className="text-box">
+          <h2>Detecciones:</h2>
+          <ul>
+            {detections.map((det, index) => (
+              <li key={index}>{det}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="selected-products">
+          <h2>Productos seleccionados:</h2>
+          <ul>
+            {selectedProducts.map((product, index) => (
+              <li key={index} className="checkbox-container">
+                <input type="checkbox" disabled checked />
+                <label>{product}</label>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <button onClick={handleBack}>Volver</button>
+      </section>
+      <footer>
+        <p>Todos los derechos reservados.</p>
+      </footer>
     </div>
   );
 };

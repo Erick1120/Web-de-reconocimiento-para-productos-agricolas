@@ -1,95 +1,112 @@
 /* bienvenida.css */
+:root {
+  --primario: #4cdb39;
+  --secundario: #30a220;
+}
 body {
-    font-family: Arial, sans-serif;
-    background-color: #e8f5e9;
-    color: #000000;
-    padding: 0;
-    flex-direction: column;
-    align-items: center;
+  font-family: "Poppins", sans-serif;
+  background-color: var(--primario);
+  color: #000000;
+  padding: 0;
+  flex-direction: column;
+  align-items: center;
 }
-
+h2 {
+  color: white;
+}
 h1 {
-    color: white;
-    background-color: #286a39;
-    text-align: center;
-    padding: 30px;
-    margin: 0 0 10px 0;   /* Margen inferior para separar del siguiente elemento */
-    width: 100vw;
-    box-sizing: border-box;
-    font-size: 2em;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  color: white;
+  border-top: 50px;
+  background-color: var(--primario);
+  text-align: center;
+  padding: 30px;
+  margin: 0; /* Margen inferior para separar del siguiente elemento */
+  width: 100%;
+  font-size: 2.2rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
+.Contenido {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
+  background-image: url(../img/fondo.jpg);
+  background-size: cover;
+  width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+}
 #mainMessage {
-    font-size: 1.2em;
-    text-align: center;
+  font-size: 1.5rem;
+  text-align: center;
+  color: white;
 }
 
 #microphone {
-    width: 100px;
-    height: 100px;
-    cursor: pointer;
+  width: 100px;
+  height: 100px;
 }
 
-button{
-    background-color: #4caf50; /* Verde */
-    border: none;
-    border-radius: 5px;
-    color: white;
-    cursor: pointer;
-    font-size: 1em;
-    margin: 6px 5px;
-    padding: 10px 10px;
+button {
+  background-color: var(--primario); /* Verde */
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-size: 1em;
+  margin: 20px 5px;
+  padding: 10px 10px;
 }
 button:hover {
-    background-color: white;
-    border: 2px solid #4caf50;
-    color: rgb(12, 179, 26);
-  }
-
+  background-color: white;
+  border: 2px solid var(--secundario);
+  color: var(--secundario);
+}
+footer {
+  color: white;
+}
 #productForm {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Centra los elementos del formulario */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra los elementos del formulario */
 }
 
 #productList {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center; /* Centra los productos */
-    width: 80%;
-    max-width: 800px;
-    max-height: 500px;
-    overflow-y: auto; /* Agrega scroll si hay demasiados productos */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Centra los productos */
+  width: 80%;
+  max-width: 800px;
+  max-height: 500px;
+  overflow-y: auto; /* Agrega scroll si hay demasiados productos */
 }
 
 .product-item {
-    width: 100px;
-    margin: 10px;
-    padding: 10px;
-    border: 1px solid #308949;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    background-color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  width: 100px;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid var(--secundario);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-color: #fff;
+  cursor: pointer;
 }
 
 .product-item.selected {
-    background-color: #4caf50; /* Color verde al seleccionar */
-    color: white;
+  background-color: var(--primario); /* Color verde al seleccionar */
+  color: white;
 }
 
 .product-item img {
-    width: 100px;
-    height: 100px;
-    margin-bottom: 5px;
+  width: 100px;
+  height: 100px;
+  margin-bottom: 5px;
 }
 
 #selectedItems {
-    margin-top: 20px;
-    font-weight: bold;
+  margin-top: 20px;
+  font-weight: bold;
 }

@@ -41,48 +41,50 @@ import cornImg from "./fruits_and_vegetables/corn.png";
 import pumpkinImg from "./fruits_and_vegetables/pumpkin.png";
 import parsleyImg from "./fruits_and_vegetables/parsley.png";
 import redOnionImg from "./fruits_and_vegetables/red onion.png";
+import papa from "./fruits_and_vegetables/papa_criolla.png";
 
 export const products = [
   // Frutas
   { name: "Manzana", imgSrc: appleImg },
-  { name: "Mandarina", imgSrc: tangerineImg },
+  // { name: "Mandarina", imgSrc: tangerineImg },
   { name: "Mango", imgSrc: mangoImg },
   { name: "Banano", imgSrc: bananaImg },
   { name: "Pera", imgSrc: pearImg },
   { name: "Piña", imgSrc: pineappleImg },
   { name: "Limón", imgSrc: lemonImg },
-  { name: "Guayaba", imgSrc: guayabaImg },
+  // { name: "Guayaba", imgSrc: guayabaImg },
   { name: "Maracuyá", imgSrc: maracuyaImg },
-  { name: "Plátano", imgSrc: platanoImg },
-  { name: "Mora", imgSrc: blackberryimg },
+  // { name: "Plátano", imgSrc: platanoImg },
+  // { name: "Mora", imgSrc: blackberryimg },
   { name: "Uva", imgSrc: grapeImg },
   { name: "Papaya", imgSrc: papayaImg },
   { name: "Lulo", imgSrc: luloImg },
-  { name: "Naranja", imgSrc: orangeImg },
+  // { name: "Naranja", imgSrc: orangeImg },
   { name: "Aguacate Verde", imgSrc: avocadoGreenImg },
-  { name: "Aguacate Negro", imgSrc: avocadoBlackImg },
-  { name: "Kiwi", imgSrc: kiwiImg },
-  { name: "Sandía", imgSrc: watermelonImg },
-  { name: "Granadilla", imgSrc: grandillaImg },
+  // { name: "Aguacate Negro", imgSrc: avocadoBlackImg },
+  // { name: "Kiwi", imgSrc: kiwiImg },
+  // { name: "Sandía", imgSrc: watermelonImg },
+  // { name: "Granadilla", imgSrc: grandillaImg },
 
   // Verduras
   { name: "Ajo", imgSrc: garlicImg },
   { name: "Cebolla Cabezona", imgSrc: cebolla2Img },
   { name: "Pimentón", imgSrc: pimentonImg },
   { name: "Cebolla Larga", imgSrc: cebollaImg },
-  { name: "Cilantro", imgSrc: cilantroimg },
+  // { name: "Cilantro", imgSrc: cilantroimg },
   { name: "Papa", imgSrc: papaImg },
   { name: "Tomate", imgSrc: tomateImg },
-  { name: "Fríjol", imgSrc: beanImg },
+  // { name: "Fríjol", imgSrc: beanImg },
   { name: "Repollo", imgSrc: cabbageImg },
   { name: "Zanahoria", imgSrc: carrotImg },
-  { name: "Coliflor", imgSrc: cauliflowerImg },
+  // { name: "Coliflor", imgSrc: cauliflowerImg },
   { name: "Pepino", imgSrc: cucumberImg },
-  { name: "Espinaca", imgSrc: spinachImg },
+  // { name: "Espinaca", imgSrc: spinachImg },
   { name: "Maíz", imgSrc: cornImg },
-  { name: "Calabaza", imgSrc: pumpkinImg },
-  { name: "Perejil", imgSrc: parsleyImg },
-  { name: "Cebolla Roja", imgSrc: redOnionImg },
+  { name: "Papa Criolla", imgSrc: papa },
+  // { name: "Calabaza", imgSrc: pumpkinImg },
+  // { name: "Perejil", imgSrc: parsleyImg },
+  // { name: "Cebolla Roja", imgSrc: redOnionImg },
 ];
 
 const ProductList = ({ onProductSelect, selectedProducts }) => {
